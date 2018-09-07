@@ -1,0 +1,36 @@
+{
+	"name": "dumongo",
+	"version": "0.0.1",
+	"description": "MongoDB typescript completions for your schema.",
+	"main": "build/index",
+	"types": "build/index",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/steebchen/dumongo.git"
+	},
+	"bugs": {
+		"url": "https://github.com/steebchen/dumongo/issues"
+	},
+	"homepage": "https://github.com/steebchen/dumongo#readme",
+	"author": "Luca Steeb <contact@luca-steeb.com>",
+	"license": "MIT",
+	"engines": {
+		"node": ">=6.0.0"
+	},
+	"scripts": {
+		"lint": "tslint -p tsconfig.json",
+		"build": "rm -rf build && tsc"
+	},
+	"pre-push": [
+		"lint",
+		"build"
+	],
+	"dependencies": {
+		"tslint-config-ultra": "^2.1.0",
+		"typescript": "^3.0.3"
+	},
+	"devDependencies": {
+		"pre-push": "^0.1.1",
+		"tslint": "^5.11.0"
+	}
+}
