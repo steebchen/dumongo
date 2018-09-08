@@ -26,6 +26,7 @@
 		"build"
 	],
 	"dependencies": {
+		"@types/mongodb": "^3.1.4",
 		"tslint-config-ultra": "^2.1.0",
 		"typescript": "^3.0.3"
 	},
