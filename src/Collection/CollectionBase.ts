@@ -6,11 +6,8 @@ export type StaticThis<T> = (new (object: Query<T>) => T) & typeof Collection
 export abstract class Collection {
 	private static collection: mongodb.Collection
 
-	public _id: string // tslint:disable-line variable-name
-	public members: Array<{
-		role: string
-		user: string
-	}>
+	// tslint:disable-next-line variable-name
+	public _id: mongodb.ObjectID
 
 	public constructor(obj: { [name: string]: any }) {
 		for (const item in obj) {
@@ -77,6 +74,14 @@ export abstract class Collection {
 		return this.collection.deleteMany(query)
 	}
 
+	public static async count<T extends Collection>(
+		this: StaticThis<T>,
+		query: Query<T>,
+		options?: mongodb.MongoCountPreferences,
+	): Promise<number> {
+		return this.collection.countDocuments(query, options)
+	}
+
 	public static async find<T extends Collection>(
 		this: StaticThis<T>,
 		query: Query<T>,
@@ -101,8 +106,8 @@ export abstract class Collection {
 		this: StaticThis<T>,
 		query: Query<T>,
 		options: FindOptions<T> = {},
-		select?: K[] | K,
-	): Promise<Array<Result<T, K>> | Array<T[K]>> {
+		select?: K | K[],
+	): Promise<Array<T[K]> | Array<Result<T, K>>> {
 		const arr = await this.collection
 			.find(query, this.select(select))
 			.sort(options.sort || {})
@@ -125,22 +130,22 @@ export abstract class Collection {
 	public static async findOne<T extends Collection, K extends keyof T>(
 		this: StaticThis<T>,
 		query: Query<T>,
-		select?: K,
+		select: K,
 	): Promise<T[K] | null>
 
 	public static async findOne<T extends Collection, K extends keyof T>(
 		this: StaticThis<T>,
 		query: Query<T>,
-		select?: K[],
+		select: K[],
 	): Promise<Result<T, K> | null>
 
 	public static async findOne<T extends Collection, K extends keyof T>(
 		this: StaticThis<T>,
 		query: Query<T>,
-		select?: K[] | K,
-	): Promise<Result<T, K> | T[K] | null> {
+		select?: K | K[],
+	): Promise<T[K] | Result<T, K> | null> {
 		const object = await this.collection.findOne(query, {
-			fields: this.select(select),
+			projection: this.select(select),
 		})
 
 		if (!object) {

@@ -1,2 +1,2 @@
 export * from './Collection'
-export * from './cursors'
+export * from './types'
