@@ -19,19 +19,29 @@
 	},
 	"scripts": {
 		"lint": "tslint -p tsconfig.json",
-		"build": "rm -rf build && tsc"
+		"build": "rm -rf build && tsc",
+		"test": "yarn build && nyc mocha --require source-map-support/register --require intelli-espower-loader 'build/test/**/*.js' 'build/**/*.spec.js'"
 	},
 	"pre-push": [
 		"lint",
 		"build"
 	],
 	"dependencies": {
+		"@types/mocha": "^5.2.5",
 		"@types/mongodb": "^3.1.4",
 		"tslint-config-ultra": "^2.1.0",
 		"typescript": "^3.0.3"
 	},
 	"devDependencies": {
+		"intelli-espower-loader": "^1.0.1",
+		"mocha": "^5.2.0",
+		"mongodb": "^3.1.6",
+		"nyc": "^13.0.1",
+		"power-assert": "^1.6.1",
 		"pre-push": "^0.1.1",
 		"tslint": "^5.11.0"
+	},
+	"directories": {
+		"test": "build/"
 	}
 }

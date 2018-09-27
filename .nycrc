@@ -1,0 +1,17 @@
+{
+	"extension": [
+		".js"
+	],
+	"include": [
+		"build/**"
+	],
+	"exclude": [
+		"build/test/**",
+		"build/**/*.spec.js"
+	],
+	"reporter": [
+		"lcov",
+		"html",
+		"text-summary"
+	]
+}

@@ -1,9 +1,9 @@
 import * as mongodb from 'mongodb'
 import { FindOptions, Index, Pipeline, Query, Result, Update } from './types'
 
-export type StaticThis<T> = (new (object: Query<T>) => T) & typeof Collection
+export type StaticThis<T> = (new (object: Query<T>) => T) & typeof CollectionBase
 
-export abstract class Collection {
+export abstract class CollectionBase {
 	private static collection: mongodb.Collection
 
 	// tslint:disable-next-line variable-name
@@ -19,7 +19,7 @@ export abstract class Collection {
 		this.collection = db.collection(collection)
 	}
 
-	public static createIndex<T extends Collection>(
+	public static createIndex<T extends CollectionBase>(
 		this: StaticThis<T>,
 		index: Index<T>,
 		options?: mongodb.IndexOptions,
@@ -27,7 +27,7 @@ export abstract class Collection {
 		return this.collection.createIndex(index, options)
 	}
 
-	public static async findById<T extends Collection>(
+	public static async findById<T extends CollectionBase>(
 		this: StaticThis<T>,
 		id: string,
 	): Promise<T | null> {
@@ -38,7 +38,7 @@ export abstract class Collection {
 		return new this(obj)
 	}
 
-	public static async insertOne<T extends Collection>(
+	public static async insertOne<T extends CollectionBase>(
 		this: StaticThis<T>,
 		obj: Query<T>,
 	): Promise<T> {
@@ -46,35 +46,35 @@ export abstract class Collection {
 		return new this(obj)
 	}
 
-	public static async insertMany<T extends Collection>(
+	public static async insertMany<T extends CollectionBase>(
 		this: StaticThis<T>,
 		obj: Array<Query<T>>,
 	): Promise<void> {
 		await this.collection.insertMany(obj)
 	}
 
-	public static removeById<T extends Collection>(
+	public static removeById<T extends CollectionBase>(
 		this: StaticThis<T>,
 		id: string,
 	): Promise<mongodb.DeleteWriteOpResultObject> {
 		return this.collection.deleteOne({ _id: id })
 	}
 
-	public static removeOne<T extends Collection>(
+	public static removeOne<T extends CollectionBase>(
 		this: StaticThis<T>,
 		query: Query<T>,
 	): Promise<mongodb.DeleteWriteOpResultObject> {
 		return this.collection.deleteOne(query)
 	}
 
-	public static removeMany<T extends Collection>(
+	public static removeMany<T extends CollectionBase>(
 		this: StaticThis<T>,
 		query: Query<T>,
 	): Promise<mongodb.DeleteWriteOpResultObject> {
 		return this.collection.deleteMany(query)
 	}
 
-	public static async count<T extends Collection>(
+	public static async count<T extends CollectionBase>(
 		this: StaticThis<T>,
 		query: Query<T>,
 		options?: mongodb.MongoCountPreferences,
@@ -82,27 +82,27 @@ export abstract class Collection {
 		return this.collection.countDocuments(query, options)
 	}
 
-	public static async find<T extends Collection>(
+	public static async find<T extends CollectionBase>(
 		this: StaticThis<T>,
 		query: Query<T>,
 		options?: FindOptions<T>,
 	): Promise<T[]>
 
-	public static async find<T extends Collection, K extends keyof T>(
+	public static async find<T extends CollectionBase, K extends keyof T>(
 		this: StaticThis<T>,
 		query: Query<T>,
 		options: FindOptions<T>,
 		select?: K,
 	): Promise<Array<T[K]>>
 
-	public static async find<T extends Collection, K extends keyof T>(
+	public static async find<T extends CollectionBase, K extends keyof T>(
 		this: StaticThis<T>,
 		query: Query<T>,
 		options: FindOptions<T>,
 		select?: K[],
 	): Promise<Array<Result<T, K>>>
 
-	public static async find<T extends Collection, K extends keyof T>(
+	public static async find<T extends CollectionBase, K extends keyof T>(
 		this: StaticThis<T>,
 		query: Query<T>,
 		options: FindOptions<T> = {},
@@ -122,24 +122,24 @@ export abstract class Collection {
 		return arr
 	}
 
-	public static async findOne<T extends Collection>(
+	public static async findOne<T extends CollectionBase>(
 		this: StaticThis<T>,
 		query: Query<T>,
 	): Promise<T | null>
 
-	public static async findOne<T extends Collection, K extends keyof T>(
+	public static async findOne<T extends CollectionBase, K extends keyof T>(
 		this: StaticThis<T>,
 		query: Query<T>,
 		select: K,
 	): Promise<T[K] | null>
 
-	public static async findOne<T extends Collection, K extends keyof T>(
+	public static async findOne<T extends CollectionBase, K extends keyof T>(
 		this: StaticThis<T>,
 		query: Query<T>,
 		select: K[],
 	): Promise<Result<T, K> | null>
 
-	public static async findOne<T extends Collection, K extends keyof T>(
+	public static async findOne<T extends CollectionBase, K extends keyof T>(
 		this: StaticThis<T>,
 		query: Query<T>,
 		select?: K | K[],
@@ -159,7 +159,7 @@ export abstract class Collection {
 		return new this(object)
 	}
 
-	public static updateOne<T extends Collection>(
+	public static updateOne<T extends CollectionBase>(
 		this: StaticThis<T>,
 		query: Query<T>,
 		update: Update<T>,
@@ -168,7 +168,7 @@ export abstract class Collection {
 		return this.collection.updateOne(query, update, options)
 	}
 
-	public static async findOneAndUpdate<T extends Collection>(
+	public static async findOneAndUpdate<T extends CollectionBase>(
 		this: StaticThis<T>,
 		query: Query<T>,
 		update: Update<T>,
@@ -181,7 +181,7 @@ export abstract class Collection {
 		return new this(result.value)
 	}
 
-	public static aggregate<T extends Collection>(
+	public static aggregate<T extends CollectionBase>(
 		this: StaticThis<T>,
 		pipeline: Array<Pipeline<T>>,
 		options?: mongodb.CollectionAggregationOptions,
@@ -189,7 +189,7 @@ export abstract class Collection {
 		return this.collection.aggregate(pipeline, options).toArray()
 	}
 
-	public static async aggregateOne<T extends Collection>(
+	public static async aggregateOne<T extends CollectionBase>(
 		this: StaticThis<T>,
 		pipeline: Array<Pipeline<T>>,
 		options?: mongodb.CollectionAggregationOptions,
