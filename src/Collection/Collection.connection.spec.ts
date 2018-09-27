@@ -25,11 +25,9 @@ describe('Collection.connection', function () {
 			count: 3,
 		})
 
-		const filteredProjects = projects.filter((i, n) => n < 3)
+		assert.deepStrictEqual(result.nodes(), projects)
 
-		assert.deepStrictEqual(result.nodes(), filteredProjects)
-
-		assert.deepStrictEqual(result.edges(), filteredProjects.map((i) => {
+		assert.deepStrictEqual(result.edges(), projects.map((i) => {
 			return {
 				cursor: encodeCursor(i[sortByKey]),
 				node: i,
@@ -62,9 +60,7 @@ describe('Collection.connection', function () {
 			count: 2,
 		})
 
-		// filter first 3 from projects (the 4th is invalid), reverse the order due to order: -1
-		// and then select the first 2 due to limit: 2
-		const filteredProjects = projects.slice().filter((i, n) => n < 3).reverse().filter((i, n) => n < 2)
+		const filteredProjects = projects.reverse().filter((i, n) => n < 2)
 
 		assert.deepStrictEqual(result.nodes(), filteredProjects)
 
@@ -99,7 +95,7 @@ describe('Collection.connection', function () {
 			count: 1,
 		})
 
-		const filteredProjects = projects.slice().filter((i, n) => n < 3).reverse().filter((i, n) => n === 2)
+		const filteredProjects = projects.filter((i, n) => n === 2)
 
 		assert.deepStrictEqual(result.nodes(), filteredProjects)
 

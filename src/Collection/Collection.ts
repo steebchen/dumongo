@@ -1,6 +1,6 @@
-import { CursorValue, DefaultTypes, Query, Result } from '..'
+import { CursorValue, DefaultTypes, Query, Result } from '.'
 import { decodeCursor, encodeCursor } from '../cursors'
-import { CollectionBase } from './CollectionBase'
+import { Collection as CollectionBase } from './CollectionBase'
 
 export interface Pagination {
 	order?: 1 | -1,
