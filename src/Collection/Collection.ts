@@ -46,14 +46,16 @@ export abstract class Collection extends CollectionBase {
 	>(
 		this: StaticThis<T>,
 		sortedQuery: Query<T>,
-		{
+		pagination: Pagination = {},
+		select?: K[],
+	): Promise<Connection<Result<T, K>>> {
+		const {
 			sortBy = '_id',
 			limit = 10,
 			order = 1,
 			after,
-		}: Pagination = {},
-		select?: K[],
-	): Promise<Connection<Result<T, K>>> {
+		} = pagination
+
 		const query = Object.assign({}, sortedQuery)
 		if (after) {
 			const cursor = decodeCursor(after)
