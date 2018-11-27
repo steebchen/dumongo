@@ -119,7 +119,7 @@ export abstract class Collection {
 			return arr.map((i) => i[select])
 		}
 
-		return arr
+		return arr.map((i) => new this(i))
 	}
 
 	public static async findOne<T extends Collection>(
