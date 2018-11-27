@@ -1,6 +1,6 @@
 {
 	"name": "dumongo",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"description": "MongoDB typescript completions for your schema.",
 	"main": "build/index",
 	"types": "build/index",
